@@ -290,11 +290,11 @@ namespace Microsoft.NuGet.Build.Tasks.Tests
 
             AssertHelpers.AssertCountOf(4, result.References);
 
-            var corePath = Path.Combine(result.ReferenceTemporaryPath, @"FluentAssertions\3.4.1\lib\net45\FluentAssertions.Core.dll");
+            var corePath = Path.Combine(result.ReferenceTemporaryPath, String.Format("FluentAssertions{0}3.4.1{0}lib{0}net45{0}FluentAssertions.Core.dll", Path.DirectorySeparatorChar));
             Assert.True(references.ContainsKey(corePath));
             Assert.Equal("false", references[corePath]);
 
-            var mainPath = Path.Combine(result.ReferenceTemporaryPath, @"FluentAssertions\3.4.1\lib\net45\FluentAssertions.dll");
+            var mainPath = Path.Combine(result.ReferenceTemporaryPath, String.Format("FluentAssertions{0}3.4.1{0}lib{0}net45{0}FluentAssertions.dll", Path.DirectorySeparatorChar));
             Assert.True(references.ContainsKey(mainPath));
             Assert.Equal("false", references[mainPath]);
 

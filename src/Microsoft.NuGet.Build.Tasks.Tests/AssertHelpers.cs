@@ -31,7 +31,7 @@ namespace Microsoft.NuGet.Build.Tasks.Tests
             // Assert.EndsWith
             if (!actualPath.EndsWithPath(expectedPath))
             {
-                Assert.EndsWith("\\" + expectedPath, actualPath);
+                Assert.EndsWith(Path.DirectorySeparatorChar + expectedPath, actualPath);
 
                 // If we get out of sync with this function or EndsWithPath, that Assert might not
                 // fail. In that case, fail the test.
@@ -45,7 +45,7 @@ namespace Microsoft.NuGet.Build.Tasks.Tests
         /// </summary>
         public static bool EndsWithPath(this string path, string suffix)
         {
-            return path == suffix || path.EndsWith("\\" + suffix);
+            return path == suffix || path.EndsWith(Path.DirectorySeparatorChar + suffix);
         }
 
         public static void AssertNoTargetPaths(IEnumerable<ITaskItem> items)

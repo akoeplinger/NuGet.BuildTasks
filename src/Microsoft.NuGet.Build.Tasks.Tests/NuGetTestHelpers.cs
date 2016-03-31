@@ -92,7 +92,7 @@ namespace Microsoft.NuGet.Build.Tasks.Tests
                 {
                     foreach (string file in files)
                     {
-                        yield return Path.Combine(packagesDirectory, library.Name, file).Replace('/', '\\');
+                        yield return Path.Combine(packagesDirectory, library.Name, file).Replace('/', Path.DirectorySeparatorChar);
                     }
                 }
             }

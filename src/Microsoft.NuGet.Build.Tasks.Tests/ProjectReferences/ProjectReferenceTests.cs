@@ -3,7 +3,9 @@
 
 using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
+using System;
 using System.Linq;
+using System.IO;
 using Xunit;
 
 namespace Microsoft.NuGet.Build.Tasks.Tests.ProjectReferences
@@ -17,7 +19,7 @@ namespace Microsoft.NuGet.Build.Tasks.Tests.ProjectReferences
                 () => NuGetTestHelpers.ResolvePackagesWithJsonFileContents(Resources.LockFileWithXProjReference, ".NETFramework,Version=v4.5.2", "win"));
 
             Assert.Equal(nameof(Strings.MissingProjectReference), exception.ResourceName);
-            AssertHelpers.PathEndsWith(@"XProjClassLib\XProjClassLib.xproj", exception.MessageArgs[0]);
+            AssertHelpers.PathEndsWith(String.Format("XProjClassLib{0}XProjClassLib.xproj", Path.DirectorySeparatorChar), exception.MessageArgs[0]);
         }
 
         [Fact]
@@ -33,7 +35,7 @@ namespace Microsoft.NuGet.Build.Tasks.Tests.ProjectReferences
         [Fact]
         public void ProjectReferenceToXProjWithAssetsAndPathSucceeds()
         {
-            var referenceToXProj = new TaskItem(@"..\XProjClassLib\XProjClassLib.xproj");
+            var referenceToXProj = new TaskItem(String.Format("..{0}XProjClassLib{0}XProjClassLib.xproj", Path.DirectorySeparatorChar));
             referenceToXProj.SetMetadata("OutputBasePath", "XProjOutputDirectory");
 
             var result = NuGetTestHelpers.ResolvePackagesWithJsonFileContents(
@@ -43,8 +45,8 @@ namespace Microsoft.NuGet.Build.Tasks.Tests.ProjectReferences
                 projectReferencesCreatingPackages: new[] { referenceToXProj });
 
             Assert.Empty(result.Analyzers);
-            AssertHelpers.PathEndsWith(@"XProjOutputDirectory\net452\XProjClassLib.dll", result.CopyLocalItems.Single().ItemSpec);
-            AssertHelpers.PathEndsWith(@"XProjOutputDirectory\net452\XProjClassLib.dll", result.References.Single().ItemSpec);
+            AssertHelpers.PathEndsWith(String.Format("XProjOutputDirectory{0}net452{0}XProjClassLib.dll", Path.DirectorySeparatorChar), result.CopyLocalItems.Single().ItemSpec);
+            AssertHelpers.PathEndsWith(String.Format("XProjOutputDirectory{0}net452{0}XProjClassLib.dll", Path.DirectorySeparatorChar), result.References.Single().ItemSpec);
             Assert.All(result.References, r => Assert.Equal(ResolveNuGetPackageAssets.NuGetSourceType_Project, r.GetMetadata(ResolveNuGetPackageAssets.NuGetSourceType)));
             Assert.Empty(result.ReferencedPackages);
         }
